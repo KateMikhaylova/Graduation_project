@@ -1,0 +1,649 @@
+# примеры API-запросов
+
+@baseUrl = http://localhost:8000/api/v1
+
+###
+
+# регистрация пользователя
+POST {{baseUrl}}/users/
+Content-Type: application/json
+
+{
+  "username": "username",
+  "password": "StrongPassword1!",
+  "email": "email@mail.ru",
+  "first_name": "first_name",
+  "last_name": "last_name",
+  "company": "company",
+  "position": "position"
+}
+
+###
+
+# посмотреть пользователей
+GET {{baseUrl}}/users/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+# посмотреть пользователя
+GET {{baseUrl}}/users/11/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+# удалить (деактивировать) пользователя
+DELETE {{baseUrl}}/users/20/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+###
+
+# изменить пользователя
+PATCH {{baseUrl}}/users/21/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+{
+  "username": "patch"
+}
+
+###
+
+# получение токена
+POST {{baseUrl}}/authorize/
+Content-Type: application/json
+
+{
+  "username": "patch",
+  "password": "StrongPassword1!"
+}
+
+###
+
+# восстановление пароля запрос токена
+POST {{baseUrl}}/password_reset/
+Content-Type: application/json
+
+{
+  "username": "patch"
+}
+
+###
+
+# восстановление пароля новый пароль
+POST {{baseUrl}}/password_reset/
+Content-Type: application/json
+
+{
+  "username": "patch",
+  "token": "09089882-e45f-4f1d-ad15-0b4db867c662",
+  "new_password": "VeryStrongPassword1!"
+}
+
+###
+
+# создать поставщика
+POST {{baseUrl}}/suppliers/
+Content-Type: application/json
+Authorization: Token b92464e2d55f2080ae742067d068ea83a365c7f2
+
+{
+  "name": "new_supplier"
+}
+
+###
+
+# посмотреть поставщиков
+GET {{baseUrl}}/suppliers/
+Content-Type: application/json
+Authorization: Token b92464e2d55f2080ae742067d068ea83a365c7f2
+
+
+###
+
+# посмотреть поставщика
+GET {{baseUrl}}/suppliers/5/
+Content-Type: application/json
+Authorization: Token b92464e2d55f2080ae742067d068ea83a365c7f2
+
+
+###
+
+# удалить поставщика (деактивация приема заказов)
+DELETE {{baseUrl}}/suppliers/5/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+# изменить поставщика (деактивация приема заказов)
+PATCH {{baseUrl}}/suppliers/5/
+Content-Type: application/json
+Authorization: Token b92464e2d55f2080ae742067d068ea83a365c7f2
+
+{
+  "order_status": true
+}
+
+###
+
+# создать категорию
+POST {{baseUrl}}/categories/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+{
+  "name": "new_category"
+}
+
+###
+
+# посмотреть категории
+GET {{baseUrl}}/categories/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+# посмотреть категорию
+GET {{baseUrl}}/categories/5/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+# фильтр категорий
+GET {{baseUrl}}/categories/?name=Сок
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+# поиск категорий
+GET {{baseUrl}}/categories/?search=о
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+# изменить категорию
+PATCH {{baseUrl}}/categories/6/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+{
+  "name": "patch_category"
+}
+
+###
+
+# удалить категорию
+DELETE {{baseUrl}}/categories/6/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+# создать товар
+POST {{baseUrl}}/products/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+{
+  "name": "new_product",
+  "category": 1
+}
+
+###
+
+# посмотреть товары
+GET {{baseUrl}}/products/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+###
+
+# посмотреть товар
+GET {{baseUrl}}/products/5/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+###
+
+# фильтрация товаров
+GET {{baseUrl}}/products/?category__name=Сок
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+###
+
+# поиск товаров
+GET {{baseUrl}}/products/?search=Сок
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+###
+
+# изменить товар
+PATCH {{baseUrl}}/products/17/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+{
+  "name": "patch_product",
+  "category": 1
+}
+
+###
+
+# удалить товар
+DELETE {{baseUrl}}/products/17/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+{
+  "name": "patch_product",
+  "category": 1
+}
+
+###
+
+# создать характеристику
+POST {{baseUrl}}/characteristics/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+{
+  "name": "new_characteristic"
+}
+
+###
+
+# посмотреть характеристики
+GET {{baseUrl}}/characteristics/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+# посмотреть характеристику
+GET {{baseUrl}}/characteristics/6/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+# изменить характеристику
+PATCH {{baseUrl}}/characteristics/6/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+{
+  "name": "patch_characteristic"
+}
+
+###
+
+# удалить характеристику
+DELETE {{baseUrl}}/characteristics/6/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+###
+
+# создать запас
+POST {{baseUrl}}/stocks/
+Content-Type: application/json
+Authorization: Token 93f75b905e8edd9eeb416b58f5116256a1371f65
+
+{
+  "sku":"art123",
+  "product": 4,
+  "quantity": 1,
+  "price":1,
+  "price_rrc":2
+}
+
+###
+
+# посмотреть запасы
+GET {{baseUrl}}/stocks/
+Content-Type: application/json
+Authorization: Token 93f75b905e8edd9eeb416b58f5116256a1371f65
+
+
+###
+
+# посмотреть запас
+GET {{baseUrl}}/stocks/19/
+Content-Type: application/json
+Authorization: Token 93f75b905e8edd9eeb416b58f5116256a1371f65
+
+
+###
+
+# изменить запас
+PATCH {{baseUrl}}/stocks/19/
+Content-Type: application/json
+Authorization: Token 93f75b905e8edd9eeb416b58f5116256a1371f65
+
+{
+  "quantity": 100,
+  "price":100,
+  "price_rrc":200
+}
+
+###
+
+# удалить запас
+DELETE {{baseUrl}}/stocks/19/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+###
+
+# создать характеристику товара
+POST {{baseUrl}}/product_characteristics/
+Content-Type: application/json
+Authorization: Token 93f75b905e8edd9eeb416b58f5116256a1371f65
+
+{
+  "stock": 1,
+  "characteristic": 3,
+  "value": "500 g"
+}
+
+###
+
+# посмотреть характеристики товаров
+GET {{baseUrl}}/product_characteristics/
+Content-Type: application/json
+Authorization: Token 93f75b905e8edd9eeb416b58f5116256a1371f65
+
+
+###
+
+# посмотреть характеристику товара
+GET {{baseUrl}}/product_characteristics/24/
+Content-Type: application/json
+Authorization: Token 93f75b905e8edd9eeb416b58f5116256a1371f65
+
+###
+
+# изменить характеристику товара
+PATCH {{baseUrl}}/product_characteristics/24/
+Content-Type: application/json
+Authorization: Token 93f75b905e8edd9eeb416b58f5116256a1371f65
+
+{
+  "value": "900 g"
+}
+
+###
+
+# удалить характеристику товара
+DELETE {{baseUrl}}/product_characteristics/24/
+Content-Type: application/json
+Authorization: Token 93f75b905e8edd9eeb416b58f5116256a1371f65
+
+
+###
+
+# импорт товаров
+POST {{baseUrl}}/import/
+Content-Type: application/json
+Authorization: Token b92464e2d55f2080ae742067d068ea83a365c7f2
+
+{
+  "url": "https://raw.githubusercontent.com/netology-code/python-final-diplom/master/data/shop1.yaml"
+}
+
+###
+
+# создать закупщика и его корзину
+POST {{baseUrl}}/purchasers/
+Content-Type: application/json
+Authorization: Token 7ea6e8d2b5db3a233003e3bd94c7be21a4cdbab2
+
+{
+  "name": "new_purchaser"
+}
+
+###
+
+# посмотреть закупщиков
+GET {{baseUrl}}/purchasers/
+Content-Type: application/json
+Authorization: Token 7ea6e8d2b5db3a233003e3bd94c7be21a4cdbab2
+
+
+###
+
+# посмотреть закупщика
+GET {{baseUrl}}/purchasers/4/
+Content-Type: application/json
+Authorization: Token 7ea6e8d2b5db3a233003e3bd94c7be21a4cdbab2
+
+
+###
+
+# изменить закупщика
+PATCH {{baseUrl}}/purchasers/4/
+Content-Type: application/json
+Authorization: Token 7ea6e8d2b5db3a233003e3bd94c7be21a4cdbab2
+
+{
+  "name": "patch_purchaser"
+}
+
+###
+
+# посмотреть корзины
+GET {{baseUrl}}/shopping_carts/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+# посмотреть корзину
+GET {{baseUrl}}/shopping_carts/1/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+# очистить корзину
+DELETE {{baseUrl}}/shopping_carts/1/
+Content-Type: application/json
+Authorization: Token c044114c0ff9cee5f8b267e19af8b2f903b12172
+
+
+###
+
+# создать позицию корзины
+POST {{baseUrl}}/cart_positions/
+Content-Type: application/json
+Authorization: Token c044114c0ff9cee5f8b267e19af8b2f903b12172
+
+{
+  "stock": 1,
+  "quantity": 100
+}
+
+###
+
+# посмотреть позиции корзин
+GET {{baseUrl}}/cart_positions/
+Content-Type: application/json
+Authorization: Token c044114c0ff9cee5f8b267e19af8b2f903b12172
+
+
+###
+
+# посмотреть позицию корзины
+GET {{baseUrl}}/cart_positions/8/
+Content-Type: application/json
+Authorization: Token c044114c0ff9cee5f8b267e19af8b2f903b12172
+
+
+###
+
+# изменить позицию корзины
+PATCH {{baseUrl}}/cart_positions/8/
+Content-Type: application/json
+Authorization: Token c044114c0ff9cee5f8b267e19af8b2f903b12172
+
+{
+  "quantity": 1000
+}
+
+###
+
+# удалить позицию корзины
+DELETE {{baseUrl}}/cart_positions/8/
+Content-Type: application/json
+Authorization: Token c044114c0ff9cee5f8b267e19af8b2f903b12172
+
+
+###
+
+# создать сетевой магазин
+POST {{baseUrl}}/chain_stores/
+Content-Type: application/json
+Authorization: Token c044114c0ff9cee5f8b267e19af8b2f903b12172
+
+{
+  "name": "new_store",
+  "address": "new_address",
+  "phone": "new_phone"
+}
+
+###
+
+# посмотреть сетевые магазины
+GET {{baseUrl}}/chain_stores/
+Content-Type: application/json
+Authorization: Token c044114c0ff9cee5f8b267e19af8b2f903b12172
+
+
+###
+
+# посмотреть сетевой магазин
+GET {{baseUrl}}/chain_stores/5/
+Content-Type: application/json
+Authorization: Token c044114c0ff9cee5f8b267e19af8b2f903b12172
+
+
+###
+
+# изменить сетевой магазин
+PATCH {{baseUrl}}/chain_stores/5/
+Content-Type: application/json
+Authorization: Token c044114c0ff9cee5f8b267e19af8b2f903b12172
+
+{
+  "name": "patch_store",
+  "address": "patch_address",
+  "phone": "patch_phone"
+}
+
+###
+
+# удалить сетевой магазин
+DELETE {{baseUrl}}/chain_stores/5/
+Content-Type: application/json
+Authorization: Token 53180fdb62ff15e001be4c66f237d8295ba081d2
+
+
+###
+
+# создать заказ
+POST {{baseUrl}}/orders/
+Content-Type: application/json
+Authorization: Token 7ebeda54f58d52726f7c331d94287a656c79f662
+
+{
+  "chain_store": 4
+}
+
+###
+
+# посмотреть заказы
+GET {{baseUrl}}/orders/
+Content-Type: application/json
+Authorization: Token 7ebeda54f58d52726f7c331d94287a656c79f662
+
+
+###
+
+# посмотреть заказ
+GET {{baseUrl}}/orders/8/
+Content-Type: application/json
+Authorization: Token 7ebeda54f58d52726f7c331d94287a656c79f662
+
+
+###
+
+# изменить заказ
+PATCH {{baseUrl}}/orders/1/
+Content-Type: application/json
+Authorization: Token c044114c0ff9cee5f8b267e19af8b2f903b12172
+
+{
+  "chain_store": 2
+}
+
+###
+
+# отменить заказ
+DELETE {{baseUrl}}/orders/8/
+Content-Type: application/json
+Authorization: Token 7ebeda54f58d52726f7c331d94287a656c79f662
+
+
+###
+
+# посмотреть позиции заказов
+GET {{baseUrl}}/order_positions/
+Content-Type: application/json
+Authorization: Token 7ebeda54f58d52726f7c331d94287a656c79f662
+
+
+###
+
+# посмотреть позицию заказа
+GET {{baseUrl}}/order_positions/23/
+Content-Type: application/json
+Authorization: Token 7ebeda54f58d52726f7c331d94287a656c79f662
+
+
+###
+
+# изменить (подтвердить/доставить) позицию заказа
+PATCH {{baseUrl}}/order_positions/2/
+Content-Type: application/json
+Authorization: Token 45645639391f932468a917523f2794f1400c2af6
+
+{
+  "confirmed": true
+}
+
+###
