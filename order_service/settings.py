@@ -156,3 +156,5 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
     ],
 }
+
+COMBINED_ORDER_MULTIPLIER = "1.1"
