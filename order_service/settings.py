@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'procurement_supply',
     'rest_framework',
     'rest_framework.authtoken',
-    'django_filters'
+    'django_filters',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
 ]
 
 MIDDLEWARE = [
@@ -159,7 +161,18 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle',
         'rest_framework.throttling.AnonRateThrottle'
     ],
-    'DEFAULT_THROTTLE_RATES': {'user': '20/minute', 'anon': '5/minute'}
+    'DEFAULT_THROTTLE_RATES': {'user': '2000/hour', 'anon': '100/hour'},
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Order service',
+    'DESCRIPTION': 'An application providing order operations between suppliers and purchasers',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_DIST': 'SIDECAR',
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
 }
 
 COMBINED_ORDER_MULTIPLIER = "1.1"

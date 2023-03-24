@@ -232,7 +232,7 @@ class ShoppingCart(models.Model):
         return sum([position.quantity for position in self.cart_positions.all()])
 
     @property
-    def total_quantity(self):
+    def total_quantity(self) -> int:
         """
         Sets total_quantity field of shopping cart instance
         :return: total quantity of items
@@ -247,7 +247,7 @@ class ShoppingCart(models.Model):
         return sum([position.amount for position in self.cart_positions.all()])
 
     @property
-    def total_amount(self):
+    def total_amount(self) -> Decimal:
         """
         Sets total_amount field of shopping cart instance
         :return: total amount of cart
@@ -257,6 +257,7 @@ class ShoppingCart(models.Model):
     class Meta:
         verbose_name = "Корзина"
         verbose_name_plural = "Список корзин"
+        ordering = ("id",)
 
 
 class CartPosition(models.Model):
@@ -276,7 +277,7 @@ class CartPosition(models.Model):
     )
 
     @property
-    def amount(self):
+    def amount(self) -> Decimal:
         """
         Calculates and setts amount field of cart position instance
         :return:
@@ -319,7 +320,7 @@ class Order(models.Model):
         return True
 
     @property
-    def confirmed(self):
+    def confirmed(self) -> bool:
         """
         Sets confirmed field of order instance
         :return: True if all positions are confirmed, otherwise False
@@ -337,7 +338,7 @@ class Order(models.Model):
         return True
 
     @property
-    def delivered(self):
+    def delivered(self) -> bool:
         """
         Sets delivered field of order instance
         :return: True if all positions are delivered, otherwise False
@@ -352,7 +353,7 @@ class Order(models.Model):
         return sum([position.quantity for position in self.order_positions.all()])
 
     @property
-    def total_quantity(self):
+    def total_quantity(self) -> int:
         """
         Sets total_quantity field of order instance
         :return: total quantity of items
@@ -376,7 +377,7 @@ class Order(models.Model):
         return amount
 
     @property
-    def total_amount(self):
+    def total_amount(self) -> Decimal:
         """
         Sets total_amount field of order instance
         :return: total amount of order
@@ -411,7 +412,7 @@ class OrderPosition(models.Model):
     delivered = models.BooleanField(default=False)
 
     @property
-    def amount(self):
+    def amount(self) -> Decimal:
         """
         Calculates and setts amount field of order position instance
         :return:

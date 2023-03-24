@@ -1,0 +1,2627 @@
+openapi: 3.0.3
+info:
+  title: Order service
+  version: 1.0.0
+  description: An application providing order operations between suppliers and purchasers
+paths:
+  /api/v1/authorize/:
+    post:
+      operationId: api_v1_authorize_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+  /api/v1/cart_positions/:
+    get:
+      operationId: api_v1_cart_positions_list
+      description: ViewSet class to provide CRUD operations with cart position instances
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCartPositionList'
+          description: ''
+    post:
+      operationId: api_v1_cart_positions_create
+      description: Create a cart position instance.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartPosition'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CartPosition'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CartPosition'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartPosition'
+          description: ''
+  /api/v1/cart_positions/{id}/:
+    get:
+      operationId: api_v1_cart_positions_retrieve
+      description: ViewSet class to provide CRUD operations with cart position instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Позиция корзины.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartPosition'
+          description: ''
+    patch:
+      operationId: api_v1_cart_positions_partial_update
+      description: ViewSet class to provide CRUD operations with cart position instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Позиция корзины.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCartPosition'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCartPosition'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCartPosition'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartPosition'
+          description: ''
+    delete:
+      operationId: api_v1_cart_positions_destroy
+      description: Destroy a cart position instance.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Позиция корзины.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/categories/:
+    get:
+      operationId: api_v1_categories_list
+      description: ViewSet class to provide CRUD operations with category instances
+      parameters:
+      - in: query
+        name: id
+        schema:
+          type: integer
+      - in: query
+        name: name
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCategoryList'
+          description: ''
+    post:
+      operationId: api_v1_categories_create
+      description: ViewSet class to provide CRUD operations with category instances
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/v1/categories/{id}/:
+    get:
+      operationId: api_v1_categories_retrieve
+      description: ViewSet class to provide CRUD operations with category instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Категория.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    patch:
+      operationId: api_v1_categories_partial_update
+      description: ViewSet class to provide CRUD operations with category instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Категория.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    delete:
+      operationId: api_v1_categories_destroy
+      description: ViewSet class to provide CRUD operations with category instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Категория.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/chain_stores/:
+    get:
+      operationId: api_v1_chain_stores_list
+      description: ViewSet class to provide CRUD operations with chain store instances
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedChainStoreList'
+          description: ''
+    post:
+      operationId: api_v1_chain_stores_create
+      description: Create a chain store instance.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChainStore'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChainStore'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChainStore'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChainStore'
+          description: ''
+  /api/v1/chain_stores/{id}/:
+    get:
+      operationId: api_v1_chain_stores_retrieve
+      description: ViewSet class to provide CRUD operations with chain store instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Розничный магазин.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChainStore'
+          description: ''
+    patch:
+      operationId: api_v1_chain_stores_partial_update
+      description: ViewSet class to provide CRUD operations with chain store instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Розничный магазин.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedChainStore'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedChainStore'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedChainStore'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChainStore'
+          description: ''
+    delete:
+      operationId: api_v1_chain_stores_destroy
+      description: ViewSet class to provide CRUD operations with chain store instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Розничный магазин.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/characteristics/:
+    get:
+      operationId: api_v1_characteristics_list
+      description: ViewSet class to provide CRUD operations with characteristic instances
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCharacteristicList'
+          description: ''
+    post:
+      operationId: api_v1_characteristics_create
+      description: ViewSet class to provide CRUD operations with characteristic instances
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Characteristic'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Characteristic'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Characteristic'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Characteristic'
+          description: ''
+  /api/v1/characteristics/{id}/:
+    get:
+      operationId: api_v1_characteristics_retrieve
+      description: ViewSet class to provide CRUD operations with characteristic instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Характеристика.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Characteristic'
+          description: ''
+    patch:
+      operationId: api_v1_characteristics_partial_update
+      description: ViewSet class to provide CRUD operations with characteristic instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Характеристика.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCharacteristic'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCharacteristic'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCharacteristic'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Characteristic'
+          description: ''
+    delete:
+      operationId: api_v1_characteristics_destroy
+      description: ViewSet class to provide CRUD operations with characteristic instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Характеристика.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/import/:
+    post:
+      operationId: api_v1_import_create
+      description: |-
+        Method to arrange import of stocks from suppliers file with determinated structure
+        :param request: request object
+        :return: response with corresponding status code
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/order_positions/:
+    get:
+      operationId: api_v1_order_positions_list
+      description: ViewSet class to provide CRUD operations with order position instances
+      parameters:
+      - in: query
+        name: order__status
+        schema:
+          type: string
+          enum:
+          - cancelled
+          - saved
+        description: |-
+          * `saved` - сохранен
+          * `cancelled` - отменен
+
+          * `saved` - сохранен
+          * `cancelled` - отменен
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderPositionList'
+          description: ''
+  /api/v1/order_positions/{id}/:
+    get:
+      operationId: api_v1_order_positions_retrieve
+      description: ViewSet class to provide CRUD operations with order position instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Позиция заказа.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderPosition'
+          description: ''
+    patch:
+      operationId: api_v1_order_positions_partial_update
+      description: ViewSet class to provide CRUD operations with order position instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Позиция заказа.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderPosition'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderPosition'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderPosition'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderPosition'
+          description: ''
+  /api/v1/orders/:
+    get:
+      operationId: api_v1_orders_list
+      description: ViewSet class to provide CRUD operations with order instances
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderList'
+          description: ''
+    post:
+      operationId: api_v1_orders_create
+      description: |-
+        Create an order instance and order position instances based on shopping cart instance and cart position
+        instances
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/v1/orders/{id}/:
+    get:
+      operationId: api_v1_orders_retrieve
+      description: ViewSet class to provide CRUD operations with order instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Заказ.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    patch:
+      operationId: api_v1_orders_partial_update
+      description: ViewSet class to provide CRUD operations with order instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Заказ.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    delete:
+      operationId: api_v1_orders_destroy
+      description: Set to cancelled an order instance.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Заказ.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/password_reset/:
+    post:
+      operationId: api_v1_password_reset_create
+      description: |-
+        Method to arrange receipt of password reset token and to reset password using this token
+        :param request: request objects
+        :return: response with corresponding status code
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/product_characteristics/:
+    get:
+      operationId: api_v1_product_characteristics_list
+      description: ViewSet class to provide CRUD operations with product characteristic
+        instances
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductCharacteristicList'
+          description: ''
+    post:
+      operationId: api_v1_product_characteristics_create
+      description: Create a product characteristic instance.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCharacteristic'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductCharacteristic'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductCharacteristic'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCharacteristic'
+          description: ''
+  /api/v1/product_characteristics/{id}/:
+    get:
+      operationId: api_v1_product_characteristics_retrieve
+      description: ViewSet class to provide CRUD operations with product characteristic
+        instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Характеристика запаса
+          продукта.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCharacteristic'
+          description: ''
+    patch:
+      operationId: api_v1_product_characteristics_partial_update
+      description: ViewSet class to provide CRUD operations with product characteristic
+        instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Характеристика запаса
+          продукта.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProductCharacteristic'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProductCharacteristic'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProductCharacteristic'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCharacteristic'
+          description: ''
+    delete:
+      operationId: api_v1_product_characteristics_destroy
+      description: ViewSet class to provide CRUD operations with product characteristic
+        instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Характеристика запаса
+          продукта.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/products/:
+    get:
+      operationId: api_v1_products_list
+      description: ViewSet class to provide CRUD operations with product instances
+      parameters:
+      - in: query
+        name: category__id
+        schema:
+          type: integer
+      - in: query
+        name: category__name
+        schema:
+          type: string
+      - in: query
+        name: id
+        schema:
+          type: integer
+      - in: query
+        name: name
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductList'
+          description: ''
+    post:
+      operationId: api_v1_products_create
+      description: ViewSet class to provide CRUD operations with product instances
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Product'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /api/v1/products/{id}/:
+    get:
+      operationId: api_v1_products_retrieve
+      description: ViewSet class to provide CRUD operations with product instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Продукт.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    patch:
+      operationId: api_v1_products_partial_update
+      description: ViewSet class to provide CRUD operations with product instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Продукт.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    delete:
+      operationId: api_v1_products_destroy
+      description: ViewSet class to provide CRUD operations with product instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Продукт.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/purchasers/:
+    get:
+      operationId: api_v1_purchasers_list
+      description: ViewSet class to provide CRUD operations with purchaser instances
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPurchaserList'
+          description: ''
+    post:
+      operationId: api_v1_purchasers_create
+      description: Create a purchaser instance and corresponding shopping cart instance
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Purchaser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Purchaser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Purchaser'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchaser'
+          description: ''
+  /api/v1/purchasers/{id}/:
+    get:
+      operationId: api_v1_purchasers_retrieve
+      description: ViewSet class to provide CRUD operations with purchaser instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Закупщик.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchaser'
+          description: ''
+    patch:
+      operationId: api_v1_purchasers_partial_update
+      description: ViewSet class to provide CRUD operations with purchaser instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Закупщик.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPurchaser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPurchaser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPurchaser'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchaser'
+          description: ''
+  /api/v1/shopping_carts/:
+    get:
+      operationId: api_v1_shopping_carts_list
+      description: ViewSet class to provide CRUD operations with shopping cart instances
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedShoppingCartList'
+          description: ''
+  /api/v1/shopping_carts/{id}/:
+    get:
+      operationId: api_v1_shopping_carts_retrieve
+      description: ViewSet class to provide CRUD operations with shopping cart instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Корзина.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingCart'
+          description: ''
+    delete:
+      operationId: api_v1_shopping_carts_destroy
+      description: Delete all positions from shopping cart
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Корзина.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/stocks/:
+    get:
+      operationId: api_v1_stocks_list
+      description: ViewSet class to provide CRUD operations with stock instances
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: product__category__id
+        schema:
+          type: integer
+      - in: query
+        name: product__category__name
+        schema:
+          type: string
+      - in: query
+        name: product__id
+        schema:
+          type: integer
+      - in: query
+        name: product__name
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: supplier__id
+        schema:
+          type: integer
+      - in: query
+        name: supplier__name
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedStockList'
+          description: ''
+    post:
+      operationId: api_v1_stocks_create
+      description: Create a stock instance.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Stock'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Stock'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Stock'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stock'
+          description: ''
+  /api/v1/stocks/{id}/:
+    get:
+      operationId: api_v1_stocks_retrieve
+      description: ViewSet class to provide CRUD operations with stock instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Запас продукта.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stock'
+          description: ''
+    patch:
+      operationId: api_v1_stocks_partial_update
+      description: ViewSet class to provide CRUD operations with stock instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Запас продукта.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedStock'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedStock'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedStock'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stock'
+          description: ''
+    delete:
+      operationId: api_v1_stocks_destroy
+      description: ViewSet class to provide CRUD operations with stock instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Запас продукта.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/suppliers/:
+    get:
+      operationId: api_v1_suppliers_list
+      description: ViewSet class to provide CRUD operations with supplier instances
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSupplierList'
+          description: ''
+    post:
+      operationId: api_v1_suppliers_create
+      description: Create a supplier instance.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: ''
+  /api/v1/suppliers/{id}/:
+    get:
+      operationId: api_v1_suppliers_retrieve
+      description: ViewSet class to provide CRUD operations with supplier instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Поставщик.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: ''
+    patch:
+      operationId: api_v1_suppliers_partial_update
+      description: ViewSet class to provide CRUD operations with supplier instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Поставщик.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSupplier'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSupplier'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSupplier'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: ''
+    delete:
+      operationId: api_v1_suppliers_destroy
+      description: Destroy (stop orders for) a supplier instance.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Поставщик.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/users/:
+    get:
+      operationId: api_v1_users_list
+      description: ViewSet class to provide CRUD operations with user instances
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: api_v1_users_create
+      description: Create a user instance and send email confirmation.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/users/{id}/:
+    get:
+      operationId: api_v1_users_retrieve
+      description: ViewSet class to provide CRUD operations with user instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Пользователь.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: api_v1_users_partial_update
+      description: ViewSet class to provide CRUD operations with user instances
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Пользователь.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: api_v1_users_destroy
+      description: Destroy (deactivate) a user instance.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Пользователь.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AuthToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - password
+      - token
+      - username
+    CartPosition:
+      type: object
+      description: Serializer class to serialize cart position instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        shopping_cart:
+          type: integer
+        stock:
+          type: integer
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
+        amount:
+          type: number
+          format: double
+          description: |-
+            Calculates and setts amount field of cart position instance
+            :return:
+          readOnly: true
+      required:
+      - amount
+      - id
+      - quantity
+      - shopping_cart
+      - stock
+    Category:
+      type: object
+      description: Serializer class to serialize category instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+      required:
+      - id
+      - name
+    ChainStore:
+      type: object
+      description: Serializer class to serialize chain store instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        purchaser:
+          type: integer
+        name:
+          type: string
+          maxLength: 30
+        address:
+          type: string
+          maxLength: 150
+        phone:
+          type: string
+          maxLength: 50
+      required:
+      - address
+      - id
+      - name
+      - phone
+      - purchaser
+    Characteristic:
+      type: object
+      description: Serializer class to serialize characteristic instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+      required:
+      - id
+      - name
+    Order:
+      type: object
+      description: Serializer class to serialize order instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        purchaser:
+          type: integer
+        date:
+          type: string
+          format: date-time
+          readOnly: true
+        chain_store:
+          $ref: '#/components/schemas/ChainStore'
+        total_quantity:
+          type: integer
+          description: |-
+            Sets total_quantity field of order instance
+            :return: total quantity of items
+          readOnly: true
+        total_amount:
+          type: number
+          format: double
+          description: |-
+            Sets total_amount field of order instance
+            :return: total amount of order
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+        confirmed:
+          type: boolean
+          description: |-
+            Sets confirmed field of order instance
+            :return: True if all positions are confirmed, otherwise False
+          readOnly: true
+        delivered:
+          type: boolean
+          description: |-
+            Sets delivered field of order instance
+            :return: True if all positions are delivered, otherwise False
+          readOnly: true
+        order_positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderPosition'
+          readOnly: true
+      required:
+      - chain_store
+      - confirmed
+      - date
+      - delivered
+      - id
+      - order_positions
+      - purchaser
+      - status
+      - total_amount
+      - total_quantity
+    OrderPosition:
+      type: object
+      description: Serializer class to serialize order position instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+          readOnly: true
+        stock:
+          allOf:
+          - $ref: '#/components/schemas/Stock'
+          readOnly: true
+        quantity:
+          type: integer
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
+        confirmed:
+          type: boolean
+        delivered:
+          type: boolean
+        amount:
+          type: number
+          format: double
+          description: |-
+            Calculates and setts amount field of order position instance
+            :return:
+          readOnly: true
+      required:
+      - amount
+      - id
+      - order
+      - quantity
+      - stock
+    PaginatedCartPositionList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartPosition'
+    PaginatedCategoryList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    PaginatedChainStoreList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChainStore'
+    PaginatedCharacteristicList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Characteristic'
+    PaginatedOrderList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+    PaginatedOrderPositionList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderPosition'
+    PaginatedProductCharacteristicList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductCharacteristic'
+    PaginatedProductList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    PaginatedPurchaserList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Purchaser'
+    PaginatedShoppingCartList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShoppingCart'
+    PaginatedStockList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Stock'
+    PaginatedSupplierList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplier'
+    PaginatedUserList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PatchedCartPosition:
+      type: object
+      description: Serializer class to serialize cart position instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        shopping_cart:
+          type: integer
+        stock:
+          type: integer
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
+        amount:
+          type: number
+          format: double
+          description: |-
+            Calculates and setts amount field of cart position instance
+            :return:
+          readOnly: true
+    PatchedCategory:
+      type: object
+      description: Serializer class to serialize category instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+    PatchedChainStore:
+      type: object
+      description: Serializer class to serialize chain store instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        purchaser:
+          type: integer
+        name:
+          type: string
+          maxLength: 30
+        address:
+          type: string
+          maxLength: 150
+        phone:
+          type: string
+          maxLength: 50
+    PatchedCharacteristic:
+      type: object
+      description: Serializer class to serialize characteristic instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+    PatchedOrder:
+      type: object
+      description: Serializer class to serialize order instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        purchaser:
+          type: integer
+        date:
+          type: string
+          format: date-time
+          readOnly: true
+        chain_store:
+          $ref: '#/components/schemas/ChainStore'
+        total_quantity:
+          type: integer
+          description: |-
+            Sets total_quantity field of order instance
+            :return: total quantity of items
+          readOnly: true
+        total_amount:
+          type: number
+          format: double
+          description: |-
+            Sets total_amount field of order instance
+            :return: total amount of order
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+        confirmed:
+          type: boolean
+          description: |-
+            Sets confirmed field of order instance
+            :return: True if all positions are confirmed, otherwise False
+          readOnly: true
+        delivered:
+          type: boolean
+          description: |-
+            Sets delivered field of order instance
+            :return: True if all positions are delivered, otherwise False
+          readOnly: true
+        order_positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderPosition'
+          readOnly: true
+    PatchedOrderPosition:
+      type: object
+      description: Serializer class to serialize order position instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+          readOnly: true
+        stock:
+          allOf:
+          - $ref: '#/components/schemas/Stock'
+          readOnly: true
+        quantity:
+          type: integer
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
+        confirmed:
+          type: boolean
+        delivered:
+          type: boolean
+        amount:
+          type: number
+          format: double
+          description: |-
+            Calculates and setts amount field of order position instance
+            :return:
+          readOnly: true
+    PatchedProduct:
+      type: object
+      description: Serializer class to serialize product instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+        category:
+          type: integer
+    PatchedProductCharacteristic:
+      type: object
+      description: Serializer class to serialize product characteristic instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        stock:
+          type: integer
+        characteristic:
+          type: integer
+        value:
+          type: string
+          maxLength: 30
+    PatchedPurchaser:
+      type: object
+      description: Serializer class to serialize purchaser instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        name:
+          type: string
+          maxLength: 50
+        address:
+          type: string
+          nullable: true
+          maxLength: 100
+        shopping_cart:
+          type: integer
+          readOnly: true
+        chain_stores:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChainStore'
+          readOnly: true
+    PatchedStock:
+      type: object
+      description: Serializer class to serialize stock instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        description:
+          type: string
+        model:
+          type: string
+        sku:
+          type: string
+        product:
+          type: integer
+        supplier:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
+        price_rrc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        product_characteristics:
+          type: array
+          items:
+            type: string
+          readOnly: true
+    PatchedSupplier:
+      type: object
+      description: Serializer class to serialize supplier instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        name:
+          type: string
+          maxLength: 50
+        address:
+          type: string
+        order_status:
+          type: boolean
+    PatchedUser:
+      type: object
+      description: Serializer class to serialize user instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        company:
+          type: string
+          maxLength: 50
+        position:
+          type: string
+          maxLength: 50
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        is_staff:
+          type: boolean
+          readOnly: true
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        is_superuser:
+          type: boolean
+          readOnly: true
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+    Product:
+      type: object
+      description: Serializer class to serialize product instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+        category:
+          type: integer
+      required:
+      - category
+      - id
+      - name
+    ProductCharacteristic:
+      type: object
+      description: Serializer class to serialize product characteristic instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        stock:
+          type: integer
+        characteristic:
+          type: integer
+        value:
+          type: string
+          maxLength: 30
+      required:
+      - characteristic
+      - id
+      - stock
+      - value
+    Purchaser:
+      type: object
+      description: Serializer class to serialize purchaser instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        name:
+          type: string
+          maxLength: 50
+        address:
+          type: string
+          nullable: true
+          maxLength: 100
+        shopping_cart:
+          type: integer
+          readOnly: true
+        chain_stores:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChainStore'
+          readOnly: true
+      required:
+      - chain_stores
+      - id
+      - name
+      - shopping_cart
+      - user
+    ShoppingCart:
+      type: object
+      description: Serializer class to serialize shopping cart instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        purchaser:
+          type: integer
+        total_quantity:
+          type: integer
+          description: |-
+            Sets total_quantity field of shopping cart instance
+            :return: total quantity of items
+          readOnly: true
+        total_amount:
+          type: number
+          format: double
+          description: |-
+            Sets total_amount field of shopping cart instance
+            :return: total amount of cart
+          readOnly: true
+        cart_positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartPosition'
+      required:
+      - cart_positions
+      - id
+      - purchaser
+      - total_amount
+      - total_quantity
+    StatusEnum:
+      enum:
+      - saved
+      - cancelled
+      type: string
+      description: |-
+        * `saved` - сохранен
+        * `cancelled` - отменен
+    Stock:
+      type: object
+      description: Serializer class to serialize stock instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        description:
+          type: string
+        model:
+          type: string
+        sku:
+          type: string
+        product:
+          type: integer
+        supplier:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
+        price_rrc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,2})?$
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        product_characteristics:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - id
+      - price
+      - price_rrc
+      - product
+      - product_characteristics
+      - quantity
+      - sku
+      - supplier
+    Supplier:
+      type: object
+      description: Serializer class to serialize supplier instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        name:
+          type: string
+          maxLength: 50
+        address:
+          type: string
+        order_status:
+          type: boolean
+      required:
+      - id
+      - name
+      - user
+    TypeEnum:
+      enum:
+      - purchaser
+      - supplier
+      - admin
+      type: string
+      description: |-
+        * `purchaser` - закупщик
+        * `supplier` - поставщик
+        * `admin` - админ
+    User:
+      type: object
+      description: Serializer class to serialize user instances
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        company:
+          type: string
+          maxLength: 50
+        position:
+          type: string
+          maxLength: 50
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        is_staff:
+          type: boolean
+          readOnly: true
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        is_superuser:
+          type: boolean
+          readOnly: true
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+      required:
+      - company
+      - email
+      - first_name
+      - id
+      - is_staff
+      - is_superuser
+      - last_name
+      - password
+      - position
+      - username
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
