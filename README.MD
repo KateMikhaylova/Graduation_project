@@ -25,6 +25,11 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+Для экспорта товаров доступна команда:
+```
+python manage.py export_goods
+```
+
 Для запуска тестов необходимо установить библиотеки из requirements_dev: 
 ```
 pip install -r requirements_dev.txt

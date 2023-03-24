@@ -1,0 +1,212 @@
+categories:
+- id: 15
+  name: Аксессуары
+- id: 5
+  name: Вода
+- id: 2
+  name: Крупа
+- id: 4
+  name: Лимонад
+- id: 1
+  name: Овощи
+- id: 224
+  name: Смартфоны
+- id: 3
+  name: Сок
+goods:
+- category: 5
+  id: '2985'
+  model: null
+  name: Aqua minerale
+  parameters:
+    Минерализация: Высокоминерализованная
+    Объем упаковки: 0.5 л
+  price: 60.0
+  price_rrc: 70.0
+  quantity: 500
+  shop: 3
+- category: 5
+  id: '285'
+  model: null
+  name: Bonaqua
+  parameters:
+    Минерализация: Низкоминерализованная
+    Объем упаковки: 0.5 л
+  price: 55.0
+  price_rrc: 65.0
+  quantity: 600
+  shop: 4
+- category: 2
+  id: '148465'
+  model: null
+  name: Греча
+  parameters:
+    Вес упаковки: 900 гр
+  price: 120.0
+  price_rrc: 150.0
+  quantity: 1100
+  shop: 2
+- category: 4
+  id: '79851'
+  model: null
+  name: Кока-кола
+  parameters:
+    Объем упаковки: 0.33 л
+  price: 60.0
+  price_rrc: 70.0
+  quantity: 350
+  shop: 4
+- category: 4
+  id: '4851'
+  model: null
+  name: Миринда
+  parameters:
+    Объем упаковки: 0.33 л
+  price: 55.0
+  price_rrc: 65.0
+  quantity: 180
+  shop: 3
+- category: 2
+  id: '65484'
+  model: null
+  name: Овсяная крупа
+  parameters:
+    Вес упаковки: 400 гр
+  price: 50.0
+  price_rrc: 70.0
+  quantity: 1500
+  shop: 2
+- category: 1
+  id: '9511'
+  model: null
+  name: Огурец
+  parameters:
+    Размер: Салатовый
+    Цвет: Зеленый
+  price: 130.0
+  price_rrc: 180.0
+  quantity: 2100
+  shop: 1
+- category: 4
+  id: '698562'
+  model: null
+  name: Пепси-кола
+  parameters:
+    Объем упаковки: 0.33 л
+  price: 55.0
+  price_rrc: 65.0
+  quantity: 400
+  shop: 3
+- category: 1
+  id: '5851'
+  model: null
+  name: Перец
+  parameters:
+    Размер: Желтый
+    Цвет: Красный
+  price: 250.0
+  price_rrc: 300.0
+  quantity: 900
+  shop: 1
+- category: 1
+  id: '1234'
+  model: null
+  name: Помидор
+  parameters:
+    Размер: Желтый
+    Цвет: Красный
+  price: 150.0
+  price_rrc: 200.0
+  quantity: 1100
+  shop: 1
+- category: 2
+  id: '2855'
+  model: null
+  name: Рис
+  parameters:
+    Вес упаковки: 900 гр
+  price: 90.0
+  price_rrc: 100.0
+  quantity: 900
+  shop: 2
+- category: 3
+  id: '5548'
+  model: null
+  name: Сок апельсиновый
+  parameters:
+    Объем упаковки: 1 л
+  price: 100.0
+  price_rrc: 120.0
+  quantity: 450
+  shop: 3
+- category: 3
+  id: '4842'
+  model: null
+  name: Сок апельсиновый
+  parameters:
+    Объем упаковки: 1 л
+  price: 120.0
+  price_rrc: 140.0
+  quantity: 600
+  shop: 4
+- category: 3
+  id: '99654'
+  model: null
+  name: Сок томатный
+  parameters:
+    Объем упаковки: 1 л
+  price: 100.0
+  price_rrc: 120.0
+  quantity: 500
+  shop: 3
+- category: 3
+  id: '8521'
+  model: null
+  name: Сок томатный
+  parameters:
+    Объем упаковки: 1 л
+  price: 120.0
+  price_rrc: 140.0
+  quantity: 0
+  shop: 4
+- category: 3
+  id: '7841'
+  model: null
+  name: Сок яблочный
+  parameters:
+    Объем упаковки: 1 л
+  price: 100.0
+  price_rrc: 120.0
+  quantity: 500
+  shop: 3
+- category: 3
+  id: 0845
+  model: null
+  name: Сок яблочный
+  parameters:
+    Объем упаковки: 1 л
+  price: 120.0
+  price_rrc: 140.0
+  quantity: 400
+  shop: 4
+- category: 4
+  id: '5854'
+  model: null
+  name: Фанта
+  parameters:
+    Объем упаковки: 0.33 л
+  price: 60.0
+  price_rrc: 70.0
+  quantity: 320
+  shop: 4
+shop:
+- id: 3
+  name: Pepsico
+- id: 1
+  name: Выборжец
+- id: 4
+  name: Мултон
+- id: 7
+  name: Связной
+- id: 2
+  name: Аладушкин
