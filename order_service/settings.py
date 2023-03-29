@@ -40,12 +40,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'procurement_supply',
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
     'drf_spectacular',
     'drf_spectacular_sidecar',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.vk',
 ]
 
 MIDDLEWARE = [
@@ -78,6 +83,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'order_service.wsgi.application'
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -176,3 +185,18 @@ SPECTACULAR_SETTINGS = {
 }
 
 COMBINED_ORDER_MULTIPLIER = "1.1"
+
+SITE_ID = 1
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'vk': {
+        'APP': {
+            'client_id': os.getenv('VK_CLIENT_ID'),
+            'secret': os.getenv('VK_SECRET_KEY'),
+            'key': ''
+        }
+    }
+}
+
+LOGIN_REDIRECT_URL = '/accounts/vk/login/'
