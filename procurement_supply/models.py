@@ -7,7 +7,7 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-from django.core.mail import send_mail
+from procurement_supply.tasks import send_email
 
 
 USER_TYPE_CHOICES = (
@@ -473,13 +473,11 @@ def send_email_change_order_pos_status(sender, instance, created, **kwargs):
             return
         if (instance.__original_confirmed and not instance.confirmed) \
                 or (instance.__original_delivered and not instance.delivered):
-            send_mail(
+            send_email.delay(
                 "Order position confirmation and/or delivery status revoked",
-                message=f'''Please contact supplier of position {instance.id} from your order #{instance.order.id}.
+                f'''Please contact supplier of position {instance.id} from your order #{instance.order.id}.
                  Confirmation and/or delivery status or both of this position was revoked through admin site''',
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[instance.order.purchaser.user.email],
-                fail_silently=False,
+                instance.order.purchaser.user.email,
             )
             return
         text = f'Your order #{instance.order.id} position {instance.id} was\n'
@@ -489,22 +487,18 @@ def send_email_change_order_pos_status(sender, instance, created, **kwargs):
             text += '- delivered\n'
         text += """by supplier.
         Order is confirmed when all positions are confirmed and delivered after all position are delivered"""
-        send_mail(
+        send_email.delay(
             "Order position confirmation and/or delivery status changed",
-            message=text,
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[instance.order.purchaser.user.email],
-            fail_silently=False,
+            text,
+            instance.order.purchaser.user.email
         )
 
 
 @receiver(post_save, sender=User)
 def send_email_new_user(sender, instance, created, **kwargs):
     if created:
-        send_mail(
+        send_email.delay(
             "Welcome to our site",
-            message=f"""Thank you for your registration, {instance.username}.""",
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[instance.email],
-            fail_silently=False,
+            f"""Thank you for your registration, {instance.username}.""",
+            instance.email
         )
