@@ -109,13 +109,6 @@ class UserViewSet(ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
 
-        send_mail(
-            "Welcome to our site",
-            message=f"""Thank you for your registration, {serializer.data['username']}.""",
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[serializer.data["email"]],
-            fail_silently=False,
-        )
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
@@ -1403,15 +1396,6 @@ class OrderPositionViewSet(ModelViewSet):
             if type(request.data["confirmed"]) == bool and request.data["confirmed"]:
                 if not instance.confirmed:
                     instance.confirmed = True
-                    instance.save()
-                    send_mail(
-                        "Order position confirmed",
-                        message=f"""Your order #{instance.order.id} position {instance.id} is confirmed by supplier. 
-                              Order will be confirmed after receipt of all position suppliers confirmations""",
-                        from_email=settings.EMAIL_HOST_USER,
-                        recipient_list=[purchaser.email],
-                        fail_silently=False,
-                    )
             elif (
                 type(request.data["confirmed"]) == bool
                 and not request.data["confirmed"]
@@ -1431,15 +1415,6 @@ class OrderPositionViewSet(ModelViewSet):
             if type(request.data["delivered"]) == bool and request.data["delivered"]:
                 if not instance.delivered:
                     instance.delivered = True
-                    instance.save()
-                    send_mail(
-                        "Order position delivered",
-                        message=f"""Your order #{instance.order.id} position {instance.id} is delivered by supplier. 
-                                              Order will be delivered after all position are delivered""",
-                        from_email=settings.EMAIL_HOST_USER,
-                        recipient_list=[purchaser.email],
-                        fail_silently=False,
-                    )
             elif (
                 type(request.data["delivered"]) == bool
                 and not request.data["delivered"]
@@ -1454,7 +1429,7 @@ class OrderPositionViewSet(ModelViewSet):
                     {"delivered": ["Must be a valid boolean."]},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-
+        instance.save()
         return Response(
             {"success": "Оrder position successfully amended"}, status.HTTP_200_OK
         )
