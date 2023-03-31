@@ -55,7 +55,7 @@ class Supplier(models.Model):
     """
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     address = models.CharField(max_length=100, null=True, blank=True)
     order_status = models.BooleanField(default=True)
 
