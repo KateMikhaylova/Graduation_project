@@ -614,10 +614,19 @@ class ImportView(APIView):
         :param request: request object
         :return: response with corresponding status code
         """
-
+        if not request.user.is_authenticated:
+            return Response(
+                {"detail": "Authentication credentials were not provided."},
+                status.HTTP_401_UNAUTHORIZED,
+            )
+        if not request.user.type == "supplier":
+            return Response(
+                {"detail": "You do not have permission to perform this action."},
+                status.HTTP_403_FORBIDDEN,
+            )
         url = request.data.get("url")
         if url:
-            async_result = do_import.delay(url, request.user)
+            async_result = do_import.delay(url, request.user.id)
             return Response({"detail": f"Your task id is {async_result.task_id}."}, status.HTTP_200_OK)
         return Response({"url": ["This field is required."]}, status.HTTP_400_BAD_REQUEST)
 

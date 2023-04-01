@@ -17,12 +17,7 @@ def send_email(title, message, address):
 
 
 @shared_task()
-def do_import(url, user=None):
-    if user:
-        if not user.is_authenticated:
-            return {'status': 'fail', 'detail': "Authentication credentials were not provided."}
-        if not user.type == "supplier":
-            return {"status": 'fail', 'detail': "You do not have permission to perform this action."}
+def do_import(url, user_id=None):
 
     url_validator = URLValidator()
     try:
@@ -34,9 +29,9 @@ def do_import(url, user=None):
     data = yaml.load(import_file, Loader=yaml.FullLoader)
 
     try:
-        if user:
+        if user_id:
             supplier, created = Supplier.objects.get_or_create(
-                user=user, name=data["shop"]
+                user__id=user_id, name=data["shop"]
             )
         else:
             if not Supplier.objects.filter(name=data["shop"]).exists():
