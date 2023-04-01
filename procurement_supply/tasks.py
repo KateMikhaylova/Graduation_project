@@ -1,6 +1,5 @@
 import requests
 import yaml
-
 from celery import shared_task
 from django.core.mail import send_mail
 from django.conf import settings
@@ -22,8 +21,8 @@ def do_import(url, user_id=None):
     url_validator = URLValidator()
     try:
         url_validator(url)
-    except ValidationError as error:
-        return {'status': 'fail', "detail": error}
+    except ValidationError:
+        return {'status': 'fail', "detail": 'Enter a valid URL.'}
 
     import_file = requests.get(url).content
     data = yaml.load(import_file, Loader=yaml.FullLoader)

@@ -11,7 +11,7 @@ from rest_framework.viewsets import ModelViewSet
 from celery.result import AsyncResult
 
 from order_service.celery import app as celery_app
-from procurement_supply.tasks import send_email
+from procurement_supply.tasks import send_email, do_import
 from procurement_supply.models import (CartPosition, Category, ChainStore,
                                        Characteristic, Order, OrderPosition,
                                        PasswordResetToken, Product,
@@ -38,7 +38,6 @@ from procurement_supply.serializers import (CartPositionSerializer,
                                             ShoppingCartSerializer,
                                             StockSerializer,
                                             SupplierSerializer, UserSerializer)
-from procurement_supply.tasks import do_import
 
 
 class UserViewSet(ModelViewSet):
@@ -247,7 +246,7 @@ class PasswordResetView(APIView):
                 token, created = PasswordResetToken.objects.get_or_create(user=user)
 
                 text = f"Your password reset token is {token.token}"
-                send_email("Password reset token", text, user.email)
+                send_email.delay("Password reset token", text, user.email)
                 return Response(
                     {
                         "success": "Reset token is sent to your email."
@@ -637,6 +636,16 @@ class ImportCheckView(APIView):
     """
 
     def get(self, request, task_id):
+        if not request.user.is_authenticated:
+            return Response(
+                {"detail": "Authentication credentials were not provided."},
+                status.HTTP_401_UNAUTHORIZED,
+            )
+        if not request.user.type == "supplier" and not request.user.is_superuser:
+            return Response(
+                {"detail": "You do not have permission to perform this action."},
+                status.HTTP_403_FORBIDDEN,
+            )
         result = AsyncResult(task_id, app=celery_app)
         return Response({"status": result.status, 'result': result.result}, status.HTTP_200_OK)
 
@@ -1140,12 +1149,12 @@ class OrderViewSet(ModelViewSet):
                 text += f'''Order #{position["order"]}, stock {position["stock"].product.name}, 
                 quantity {position["quantity"]}, price {position["price"]}\n'''
             text += "Use application to confirm orders"
-            send_email("New order", text, supplier.email)
+            send_email.delay("New order", text, supplier.email)
 
         response = serializer.data.copy()
         response["total_quantity"] = order.total_quantity
         response["total_amount"] = order.total_amount
-        send_email(
+        send_email.delay(
             "New order",
             f"""Thank you for your order.
             You have created new order #{response["id"]} to chain store {response["chain_store"]} 

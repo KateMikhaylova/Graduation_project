@@ -317,7 +317,7 @@ class ImportStocks(CustomModelPage):
     def save(self):
         res = do_import.delay(self.url)
 
-        self.bound_admin.message_success(self.bound_request, f'Import started. Task id to get result - {res.task_id}')
+        self.bound_admin.message_warning(self.bound_request, f'Import started. Task id to get result - {res.task_id}')
 
 
 ImportStocks.register()
