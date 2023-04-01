@@ -25,7 +25,7 @@ from procurement_supply.views import (CartPositionViewSet, CategoryViewSet,
                                       ProductCharacteristicViewSet,
                                       ProductViewSet, PurchaserViewSet,
                                       ShoppingCartViewSet, StockViewSet,
-                                      SupplierViewSet, UserViewSet)
+                                      SupplierViewSet, UserViewSet, ImportCheckView)
 
 app_name = "procurement_supply"
 r = DefaultRouter()
@@ -46,4 +46,5 @@ urlpatterns = [
     path("authorize/", obtain_auth_token),
     path("password_reset/", PasswordResetView.as_view()),
     path("import/", ImportView.as_view()),
+    path("import/<task_id>/", ImportCheckView.as_view()),
 ] + r.urls

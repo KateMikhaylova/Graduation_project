@@ -1,21 +1,17 @@
 from uuid import UUID
 
-import requests
-import yaml
-from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import MultipleObjectsReturned, ValidationError
-from django.core.mail import send_mail
-from django.core.validators import URLValidator
 from django.db.models.query import QuerySet
-from django.db.utils import IntegrityError
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
+from celery.result import AsyncResult
 
+from order_service.celery import app as celery_app
+from procurement_supply.tasks import send_email
 from procurement_supply.models import (CartPosition, Category, ChainStore,
                                        Characteristic, Order, OrderPosition,
                                        PasswordResetToken, Product,
@@ -42,6 +38,7 @@ from procurement_supply.serializers import (CartPositionSerializer,
                                             ShoppingCartSerializer,
                                             StockSerializer,
                                             SupplierSerializer, UserSerializer)
+from procurement_supply.tasks import do_import
 
 
 class UserViewSet(ModelViewSet):
@@ -250,9 +247,7 @@ class PasswordResetView(APIView):
                 token, created = PasswordResetToken.objects.get_or_create(user=user)
 
                 text = f"Your password reset token is {token.token}"
-                send_mail(
-                    "Password reset token", text, settings.EMAIL_HOST_USER, [user.email]
-                )
+                send_email("Password reset token", text, user.email)
                 return Response(
                     {
                         "success": "Reset token is sent to your email."
@@ -619,107 +614,22 @@ class ImportView(APIView):
         :param request: request object
         :return: response with corresponding status code
         """
-        if not request.user.is_authenticated:
-            return Response(
-                {"detail": "Authentication credentials were not provided."},
-                status.HTTP_401_UNAUTHORIZED,
-            )
-        if not request.user.type == "supplier":
-            return Response(
-                {"detail": "You do not have permission to perform this action."},
-                status.HTTP_403_FORBIDDEN,
-            )
+
         url = request.data.get("url")
         if url:
-            url_validator = URLValidator()
-            try:
-                url_validator(url)
-            except ValidationError as error:
-                return Response({"error": error}, status.HTTP_400_BAD_REQUEST)
+            async_result = do_import.delay(url, request.user)
+            return Response({"detail": f"Your task id is {async_result.task_id}."}, status.HTTP_200_OK)
+        return Response({"url": ["This field is required."]}, status.HTTP_400_BAD_REQUEST)
 
-            import_file = requests.get(url).content
-            data = yaml.load(import_file, Loader=yaml.FullLoader)
 
-            try:
-                supplier, created = Supplier.objects.get_or_create(
-                    user=request.user, name=data["shop"]
-                )
-            except IntegrityError:
-                return Response(
-                    {
-                        "error": "Request user already refers to another supplier instance"
-                    },
-                    status.HTTP_400_BAD_REQUEST,
-                )
+class ImportCheckView(APIView):
+    """
+    APIView class to get result of stocks import operations
+    """
 
-            for category in data["categories"]:
-                try:
-                    category_instance, created = Category.objects.get_or_create(
-                        id=category["id"], name=category["name"]
-                    )
-                    category_instance.suppliers.add(supplier.id)
-                    category_instance.save()
-                except IntegrityError:
-                    return Response(
-                        {
-                            "error": "Category with id from your file already exists with another name"
-                        },
-                        status.HTTP_400_BAD_REQUEST,
-                    )
-
-            for db_stock in Stock.objects.filter(supplier=supplier.id):
-                db_stock.quantity = 0
-                db_stock.save()
-
-            for import_stock in data["goods"]:
-                try:
-                    product, created = Product.objects.get_or_create(
-                        name=import_stock["name"],
-                        category=Category.objects.get(id=import_stock["category"]),
-                    )
-
-                except MultipleObjectsReturned:
-                    product = Product.objects.filter(
-                        name=import_stock["name"], category__id=import_stock["category"]
-                    ).first()
-                if Stock.objects.filter(
-                    sku=import_stock["id"], product=product.id, supplier=supplier.id
-                ).exists():
-                    stock = Stock.objects.get(
-                        sku=import_stock["id"], product=product.id, supplier=supplier.id
-                    )
-                    stock.model = import_stock["model"]
-                    stock.price = import_stock["price"]
-                    stock.price_rrc = import_stock["price_rrc"]
-                    stock.quantity = import_stock["quantity"]
-                    stock.save()
-                    ProductCharacteristic.objects.filter(stock=stock.id).delete()
-                else:
-                    stock = Stock.objects.create(
-                        sku=import_stock["id"],
-                        model=import_stock.get("model"),
-                        product=product,
-                        supplier=supplier,
-                        price=import_stock["price"],
-                        price_rrc=import_stock["price_rrc"],
-                        quantity=import_stock["quantity"],
-                    )
-                for name, value in import_stock["parameters"].items():
-                    characteristic, created = Characteristic.objects.get_or_create(
-                        name=name
-                    )
-                    ProductCharacteristic.objects.create(
-                        characteristic=characteristic, stock=stock, value=value
-                    )
-
-            return Response(
-                {"success": "Import or update performed successfully"},
-                status.HTTP_201_CREATED,
-            )
-        return Response(
-            {"url": ["This field is required."]}, status.HTTP_400_BAD_REQUEST
-        )
-
+    def get(self, request, task_id):
+        result = AsyncResult(task_id, app=celery_app)
+        return Response({"status": result.status, 'result': result.result}, status.HTTP_200_OK)
 
 class PurchaserViewSet(ModelViewSet):
     """
@@ -1221,26 +1131,18 @@ class OrderViewSet(ModelViewSet):
                 text += f'''Order #{position["order"]}, stock {position["stock"].product.name}, 
                 quantity {position["quantity"]}, price {position["price"]}\n'''
             text += "Use application to confirm orders"
-            send_mail(
-                "New order",
-                message=text,
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[supplier.email],
-                fail_silently=False,
-            )
+            send_email("New order", text, supplier.email)
 
         response = serializer.data.copy()
         response["total_quantity"] = order.total_quantity
         response["total_amount"] = order.total_amount
-        send_mail(
+        send_email(
             "New order",
-            message=f"""Thank you for your order.
-                  You have created new order #{response["id"]} to chain store {response["chain_store"]} 
-                  for total amount of {response["total_amount"]}
-                  Status of your order will automatically update after suppliers confirmations""",
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[user.email],
-            fail_silently=False,
+            f"""Thank you for your order.
+            You have created new order #{response["id"]} to chain store {response["chain_store"]} 
+            for total amount of {response["total_amount"]}
+            Status of your order will automatically update after suppliers confirmations""",
+            user.email
         )
         return Response(response, status=status.HTTP_201_CREATED, headers=headers)
 

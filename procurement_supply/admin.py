@@ -1,15 +1,11 @@
-import requests
-import yaml
 from etc.admin import CustomModelPage
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.db import models
-from django.core.exceptions import ValidationError, MultipleObjectsReturned
-from django.db.utils import IntegrityError
-from django.core.validators import URLValidator
 
 from procurement_supply.models import User, Category, Product, Supplier, Stock, Characteristic, ProductCharacteristic, \
     Purchaser, ChainStore, ShoppingCart, CartPosition, OrderPosition, Order
+from procurement_supply.tasks import do_import
 
 admin.site.site_header = 'Procurement Supply Review Admin'
 
@@ -319,80 +315,9 @@ class ImportStocks(CustomModelPage):
     url = models.CharField('url', max_length=500)
 
     def save(self):
-        url_validator = URLValidator()
-        try:
-            url_validator(self.url)
-        except ValidationError:
-            self.bound_admin.message_error(self.bound_request, 'Invalid URL')
-            return
+        res = do_import.delay(self.url)
 
-        import_file = requests.get(self.url).content
-        data = yaml.load(import_file, Loader=yaml.FullLoader)
-
-        if not Supplier.objects.filter(name=data["shop"]).exists():
-            self.bound_admin.message_error(self.bound_request, 'Indicted supplier does not exist')
-            return
-
-        supplier = Supplier.objects.get(name=data["shop"])
-
-        for category in data["categories"]:
-
-            try:
-                category_instance, created = Category.objects.get_or_create(
-                    id=category["id"], name=category["name"]
-                )
-                category_instance.suppliers.add(supplier.id)
-                category_instance.save()
-            except IntegrityError:
-                self.bound_admin.message_error(self.bound_request, 'Category already exists with another name')
-                return
-
-        for db_stock in Stock.objects.filter(supplier=supplier.id):
-            db_stock.quantity = 0
-            db_stock.save()
-
-        for import_stock in data["goods"]:
-            try:
-                product, created = Product.objects.get_or_create(
-                    name=import_stock["name"],
-                    category=Category.objects.get(id=import_stock["category"]),
-                )
-
-            except MultipleObjectsReturned:
-                product = Product.objects.filter(
-                    name=import_stock["name"], category__id=import_stock["category"]
-                ).first()
-
-            if Stock.objects.filter(
-                    sku=import_stock["id"], product=product.id, supplier=supplier.id
-            ).exists():
-                stock = Stock.objects.get(
-                    sku=import_stock["id"], product=product.id, supplier=supplier.id
-                )
-                stock.model = import_stock["model"]
-                stock.price = import_stock["price"]
-                stock.price_rrc = import_stock["price_rrc"]
-                stock.quantity = import_stock["quantity"]
-                stock.save()
-                ProductCharacteristic.objects.filter(stock=stock.id).delete()
-            else:
-                stock = Stock.objects.create(
-                    sku=import_stock["id"],
-                    model=import_stock.get("model"),
-                    product=product,
-                    supplier=supplier,
-                    price=import_stock["price"],
-                    price_rrc=import_stock["price_rrc"],
-                    quantity=import_stock["quantity"],
-                )
-            for name, value in import_stock["parameters"].items():
-                characteristic, created = Characteristic.objects.get_or_create(
-                    name=name
-                )
-                ProductCharacteristic.objects.create(
-                    characteristic=characteristic, stock=stock, value=value
-                )
-        self.bound_admin.message_success(self.bound_request, 'Import or update performed successfully.')
+        self.bound_admin.message_success(self.bound_request, f'Import started. Task id to get result - {res.task_id}')
 
 
 ImportStocks.register()
