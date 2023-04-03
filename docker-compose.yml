@@ -1,0 +1,61 @@
+version: '3.8'
+
+volumes:
+  pgdata:
+  nginx:
+
+networks:
+  order_network:
+
+services:
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    networks:
+      - order_network
+  django:
+    build: .
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    volumes:
+      - nginx:/code/nginx/
+    networks:
+      - order_network
+    entrypoint: /code/entrypoint.sh
+  nginx:
+    build:
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "80:80"
+    volumes:
+      - nginx:/etc/nginx/conf.d/
+    depends_on:
+      - django
+    restart: unless-stopped
+    networks:
+      - order_network
+  redis:
+    image: redis:7.0.0-alpine3.15
+    depends_on:
+      - db
+    networks:
+      - order_network
+  celery:
+    build:
+      dockerfile: Dockerfile.celery
+    env_file:
+      - ./.env
+    depends_on:
+      - redis
+      - db
+      - django
+    networks:
+      - order_network
