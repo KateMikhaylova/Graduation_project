@@ -4,25 +4,14 @@
 ```
 git clone https://github.com/KateMikhaylova/Graduation_project.git
 ```
-- заполнить файл с переменными окружения .env:
+- дозаполнить файл с переменными окружения .env (почта и приложение vk):
 ```
 nano .env
 ```
-- установить зависимости:
+
+- запустить docker compose:
 ```
-pip install -r requirements.txt
-```
-- создать миграции:
-```
-python manage.py makemigrations
-```
-- провести миграции:
-```
-python manage.py migrate
-```
-- запустить сервер:
-```
-python manage.py runserver
+sudo docker compose up --build -d
 ```
 
 Для экспорта товаров доступна команда:
@@ -52,8 +41,8 @@ api/schema/redoc/
 accounts/vk/login/
 ```
 
-Для обеспечения доступа поставщиков к админке нужно убедиться, что is_staff и is_active необходимого пользователя является True, создать из под суперпользователя в админке группу с необходимыми доступами в разделе procurement_supply:
-
+Для обеспечения доступа поставщиков к админке нужно убедиться, что is_staff и is_active необходимого пользователя является True, создать из под суперпользователя (при запуске контейнера создается суперпользователь с паролем StrongPassword1! и именем admin) в админке группу с необходимыми доступами 
+в разделе procurement_supply:
 - Пользователь: can change, can view
 - Категория: can add, can view
 - Продукт: can add, can view
@@ -68,8 +57,17 @@ accounts/vk/login/
 - Заказ: can view, can change
 - Позиция заказа: can view, can change
 
-и добавить в нее необходимых пользователей.
+в разделе admin
+- Import stocks: can add, can view
+
+и добавить в группу необходимых пользователей.
+
 Импорт товаров из админки осуществляется на роуте
 ```
 admin/admin/importstocks/
+```
+
+Импорт товаров из API и из админки реализован через celery-задачу. При импорте возвращается id задачи. Для получения результатов выполнения можно отправить GET-запрос на роут 
+```
+import/task_id/
 ```
