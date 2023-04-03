@@ -553,6 +553,25 @@ paths:
       responses:
         '200':
           description: No response body
+  /api/v1/import/{task_id}/:
+    get:
+      operationId: api_v1_import_retrieve
+      description: Checks status and result of celery-task fulfilment for authenticated
+        supplier or admin user
+      parameters:
+      - in: path
+        name: task_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
   /api/v1/order_positions/:
     get:
       operationId: api_v1_order_positions_list

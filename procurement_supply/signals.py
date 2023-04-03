@@ -7,6 +7,10 @@ from procurement_supply.tasks import send_email
 
 @receiver(pre_save, sender=OrderPosition)
 def cache_previous_order_position_status(sender, instance, **kwargs):
+    """
+    Save previous confirmed and delivered OrderPosition status in order to post_save check whether it was changed or not
+    """
+
     if instance.id:
         order_position = sender.objects.get(pk=instance.id)
         instance.__original_confirmed = order_position.confirmed
@@ -15,6 +19,10 @@ def cache_previous_order_position_status(sender, instance, **kwargs):
 
 @receiver(post_save, sender=OrderPosition)
 def send_email_change_order_pos_status(sender, instance, created, **kwargs):
+    """
+    Compares new and previous confirmation and delivery status and sends to purchaser the corresponding notification
+    """
+
     if not created:
         if (instance.__original_confirmed == instance.confirmed) \
                 and (instance.__original_delivered == instance.delivered):
@@ -44,6 +52,10 @@ def send_email_change_order_pos_status(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def send_email_new_user(sender, instance, created, **kwargs):
+    """
+    Sends user a welcome email after registration
+    """
+
     if created:
         send_email.delay(
             "Welcome to our site",

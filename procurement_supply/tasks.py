@@ -12,11 +12,17 @@ from procurement_supply.models import Supplier, Category, Stock, Product, Produc
 
 @shared_task()
 def send_email(title, message, address):
+    """
+    Sends email with indicated title and message to indicated user
+    """
     send_mail(title, message, settings.EMAIL_HOST_USER, [address], fail_silently=False)
 
 
 @shared_task()
 def do_import(url, user_id=None):
+    """
+    Performs import of stocks from file with determinated structure
+    """
 
     url_validator = URLValidator()
     try:

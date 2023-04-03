@@ -40,6 +40,18 @@ pytest
 ```
 Примеры запросов к API представлены в файле requests-examples.http
 
+Схема и интерфейс DRF-Spectacular доступны на роутах
+```
+api/schema/
+api/schema/swagger-ui/
+api/schema/redoc/
+```
+
+Авторизация через VK доступна на роуте
+```
+accounts/vk/login/
+```
+
 Для обеспечения доступа поставщиков к админке нужно убедиться, что is_staff и is_active необходимого пользователя является True, создать из под суперпользователя в админке группу с необходимыми доступами в разделе procurement_supply:
 
 - Пользователь: can change, can view
@@ -57,4 +69,7 @@ pytest
 - Позиция заказа: can view, can change
 
 и добавить в нее необходимых пользователей.
-Импорт товаров из админки осуществляется на странице http://localhost:8000/admin/admin/importstocks/
+Импорт товаров из админки осуществляется на роуте
+```
+admin/admin/importstocks/
+```

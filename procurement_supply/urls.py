@@ -46,5 +46,5 @@ urlpatterns = [
     path("authorize/", obtain_auth_token),
     path("password_reset/", PasswordResetView.as_view()),
     path("import/", ImportView.as_view()),
-    path("import/<task_id>/", ImportCheckView.as_view()),
+    path("import/<str:task_id>/", ImportCheckView.as_view()),
 ] + r.urls

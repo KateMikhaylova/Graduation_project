@@ -4,10 +4,20 @@ from procurement_supply.models import Category, Stock, Supplier
 
 
 class Command(BaseCommand):
+    """
+        Class to arrange management command export_goods.
+    """
     def add_arguments(self, parser):
+        """
+        Entry point for subclassed commands to add custom arguments.
+        """
         pass
 
     def handle(self, *args, **options):
+        """
+        Method to describe the actual logic of the command export_goods
+        """
+
         result = {'categories': [],
                   'shop': [],
                   'goods': []}

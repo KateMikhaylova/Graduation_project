@@ -626,7 +626,7 @@ class ImportView(APIView):
         url = request.data.get("url")
         if url:
             async_result = do_import.delay(url, request.user.id)
-            return Response({"detail": f"Your task id is {async_result.task_id}."}, status.HTTP_200_OK)
+            return Response({"detail": f"Your task id is {async_result.task_id}"}, status.HTTP_200_OK)
         return Response({"url": ["This field is required."]}, status.HTTP_400_BAD_REQUEST)
 
 
@@ -636,6 +636,9 @@ class ImportCheckView(APIView):
     """
 
     def get(self, request, task_id):
+        """
+        Checks status and result of celery-task fulfilment for authenticated supplier or admin user
+        """
         if not request.user.is_authenticated:
             return Response(
                 {"detail": "Authentication credentials were not provided."},
@@ -648,6 +651,7 @@ class ImportCheckView(APIView):
             )
         result = AsyncResult(task_id, app=celery_app)
         return Response({"status": result.status, 'result': result.result}, status.HTTP_200_OK)
+
 
 class PurchaserViewSet(ModelViewSet):
     """
